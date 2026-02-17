@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report an Issue – 6th Bramshill (Hawley)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:   #5E2580;
+    --purple-d: #3D1554;
+    --purple-l: #F3EBF9;
+    --teal:     #00A99D;
+    --teal-l:   #E0F7F5;
+    --amber:    #FF8F00;
+    --amber-l:  #FFF8E1;
+    --red:      #C62828;
+    --red-l:    #FFEBEE;
+    --green:    #2E7D32;
+    --green-l:  #E8F5E9;
+    --grey-1:   #212121;
+    --grey-2:   #424242;
+    --grey-3:   #757575;
+    --grey-4:   #BDBDBD;
+    --grey-5:   #F5F5F5;
+    --white:    #FFFFFF;
+    --radius:   10px;
+    --shadow:   0 2px 12px rgba(94,37,128,.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: linear-gradient(135deg, #F0EBF5 0%, #E0F7F5 100%);
+    color: var(--grey-1);
+    min-height: 100vh;
+    padding-bottom: 40px;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  .site-header {
+    background: var(--purple-d);
+    padding: 0;
+    box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+  .scout-badge {
+    width: 52px;
+    height: 52px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.2);
+  }
+  .header-text h1 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 12px;
+    color: rgba(255,255,255,.65);
+    font-weight: 400;
+    margin-top: 3px;
+  }
+
+  /* ── Content ─────────────────────────────────────────── */
+  .content {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  .hero-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(94,37,128,.12);
+    padding: 28px 24px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .hero-card .icon {
+    font-size: 64px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .hero-card h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple);
+    margin-bottom: 8px;
+  }
+  .hero-card p {
+    font-size: 14px;
+    color: var(--grey-3);
+    line-height: 1.6;
+  }
+
+  .info-box {
+    background: var(--teal-l);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 16px;
+    font-size: 13px;
+    color: var(--grey-2);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .info-box strong { color: var(--teal); }
+  .info-box.warning {
+    background: var(--red-l);
+    border-left-color: var(--red);
+  }
+  .info-box.warning strong { color: var(--red); }
+
+  /* ── Form card ───────────────────────────────────────── */
+  .form-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .form-card-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--grey-5);
+    background: var(--purple-l);
+  }
+  .form-card-header .icon { font-size: 20px; }
+  .form-card-header h3 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--purple);
+    flex: 1;
+  }
+
+  .field-row {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--grey-5);
+  }
+  .field-row:last-child { border-bottom: none; }
+  .field-row.full-width { display: block; }
+  .field-row.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  label.field-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--grey-3);
+    margin-bottom: 6px;
+  }
+  label.field-label .req {
+    color: var(--red);
+    font-size: 13px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--grey-4);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--grey-1);
+    background: var(--white);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,169,157,.12);
+  }
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+  }
+
+  /* ── Severity pills ──────────────────────────────────── */
+  .severity-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .sev-option {
+    position: relative;
+  }
+  .sev-option input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .sev-option label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 2px solid var(--grey-4);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all .2s;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--white);
+  }
+  .sev-option .dot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid var(--grey-4);
+    background: var(--white);
+    transition: all .2s;
+  }
+  .sev-option input:checked + label {
+    border-width: 2px;
+  }
+  .sev-option input:checked + label .dot {
+    border-width: 5px;
+  }
+
+  .sev-option.critical input:checked + label { border-color: #B71C1C; background: #FFEBEE; }
+  .sev-option.critical input:checked + label .dot { border-color: #B71C1C; background: #B71C1C; }
+
+  .sev-option.high input:checked + label { border-color: #E65100; background: #FFF3E0; }
+  .sev-option.high input:checked + label .dot { border-color: #E65100; background: #E65100; }
+
+  .sev-option.medium input:checked + label { border-color: #F57F17; background: #FFF8E1; }
+  .sev-option.medium input:checked + label .dot { border-color: #F57F17; background: #F57F17; }
+
+  .sev-option.low input:checked + label { border-color: var(--green); background: var(--green-l); }
+  .sev-option.low input:checked + label .dot { border-color: var(--green); background: var(--green); }
+
+  /* ── Photo upload ────────────────────────────────────── */
+  .photo-upload {
+    border: 2px dashed var(--grey-4);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all .2s;
+    background: var(--grey-5);
+  }
+  .photo-upload:hover {
+    border-color: var(--teal);
+    background: var(--teal-l);
+  }
+  .photo-upload input {
+    display: none;
+  }
+  .photo-upload .icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .photo-upload p {
+    font-size: 13px;
+    color: var(--grey-3);
+    font-weight: 500;
+  }
+  .photo-upload small {
+    display: block;
+    font-size: 11px;
+    color: var(--grey-4);
+    margin-top: 4px;
+  }
+
+  .photo-preview {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--grey-5);
+    border-radius: 8px;
+  }
+  .photo-preview.visible { display: block; }
+  .photo-preview img {
+    max-width: 100%;
+    border-radius: 6px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .photo-preview button {
+    font-size: 12px;
+    padding: 6px 12px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+  }
+
+  /* ── Submit button ───────────────────────────────────── */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--teal);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 4px 12px rgba(0,169,157,.3);
+    margin-top: 20px;
+  }
+  .submit-btn:hover {
+    background: #008F84;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,169,157,.4);
+  }
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  /* ── Success message ─────────────────────────────────── */
+  .success-msg {
+    display: none;
+    background: var(--green-l);
+    border: 2px solid var(--green);
+    border-radius: var(--radius);
+    padding: 24px;
+    text-align: center;
+    margin-top: 20px;
+  }
+  .success-msg.visible { display: block; }
+  .success-msg .icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .success-msg h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .success-msg p {
+    font-size: 13px;
+    color: var(--grey-2);
+  }
+
+  /* ── Footer ──────────────────────────────────────────── */
+  .footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: var(--grey-3);
+  }
+  .footer a {
+    color: var(--purple);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  @media (max-width: 480px) {
+    .severity-grid { grid-template-columns: 1fr; }
+    .field-row.two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ═══════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="scout-badge">⚜️</div>
+    <div class="header-text">
+      <h1>6th Bramshill (Hawley) Scout Group</h1>
+      <p>Report a Hut Issue</p>
+    </div>
+  </div>
+</header>
+
+<!-- ══ CONTENT ══════════════════════════════════════════ -->
+<div class="content">
+
+  <div class="hero-card">
+    <span class="icon">🛠️</span>
+    <h2>Spotted something that needs fixing?</h2>
+    <p>Help us keep our hut safe and well-maintained by reporting any issues you notice</p>
+  </div>
+
+  <div class="info-box warning" id="criticalWarning" style="display:none">
+    <strong>⚠️ Critical Safety Issue Detected</strong><br>
+    Please also contact the Group Scout Leader immediately and ensure the area is made safe before the next meeting.
+  </div>
+
+  <div class="info-box">
+    <strong>Your report helps everyone!</strong> All issues are logged and tracked by our maintenance team. Thank you for helping keep our hut safe.
+  </div>
+
+  <form id="issueForm">
+    <!-- Your Details -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="icon">👤</span>
+        <h3>Your Details</h3>
+      </div>
+      <div class="field-row full-width">
+        <label class="field-label">Your Name <span class="req">*</span></label>
+        <input type="text" id="reporterName" required placeholder="e.g. Sarah Jones">
+      </div>
+      <div class="field-row two-col">
+        <div>
+          <label class="field-label">Email (optional)</label>
+          <input type="email" id="reporterEmail" placeholder="your.email@example.com">
+        </div>
+        <div>
+          <label class="field-label">Phone (optional)</label>
+          <input type="tel" id="reporterPhone" placeholder="07xxx xxxxxx">
+        </div>
+      </div>
+      <div class="field-row full-width">
+        <label class="field-label">Your Role</label>
+        <select id="reporterRole">
+          <option value="parent">Parent / Helper</option>
+          <option value="leader">Leader / Assistant</option>
+          <option value="committee">Committee Member</option>
+          <option value="external">External Hirer</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Issue Details -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="icon">🔍</span>
+        <h3>Issue Details</h3>
+      </div>
+      <div class="field-row full-width">
+        <label class="field-label">Date Noticed <span class="req">*</span></label>
+        <input type="date" id="issueDate" required>
+      </div>
+      <div class="field-row full-width">
+        <label class="field-label">Location / Area <span class="req">*</span></label>
+        <select id="issueArea" required>
+          <option value="">-- Select area --</option>
+          <option value="Main Hall">Main Hall</option>
+          <option value="Kitchen">Kitchen</option>
+          <option value="Toilets">Toilets / Welfare Facilities</option>
+          <option value="Store Room">Store Room / Cupboards</option>
+          <option value="Entrance">Entrance / Reception</option>
+          <option value="External">External / Grounds / Parking</option>
+          <option value="Electrical">Electrical / Lighting</option>
+          <option value="Heating">Heating / Ventilation</option>
+          <option value="Fire Safety">Fire Safety Equipment</option>
+          <option value="Structure">Roof / Walls / Structure</option>
+          <option value="Other">Other (please describe)</option>
+        </select>
+      </div>
+      <div class="field-row full-width">
+        <label class="field-label">What's the problem? <span class="req">*</span></label>
+        <textarea id="issueDescription" required placeholder="Describe what you've noticed in as much detail as possible. Include things like:&#10;• What's broken or not working?&#10;• When did you first notice it?&#10;• Is it getting worse?&#10;• Has anyone else mentioned it?"></textarea>
+      </div>
+    </div>
+
+    <!-- Severity -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="icon">⚠️</span>
+        <h3>How Urgent Is This?</h3>
+      </div>
+      <div class="field-row full-width">
+        <label class="field-label">Severity <span class="req">*</span></label>
+        <div class="severity-grid">
+          <div class="sev-option critical">
+            <input type="radio" name="severity" id="sev-critical" value="critical" onchange="checkSeverity()" required>
+            <label for="sev-critical">
+              <span class="dot"></span>
+              <div>
+                <div>🔴 <strong>Critical</strong></div>
+                <small style="font-size:11px;color:var(--grey-3);font-weight:400">Immediate safety risk</small>
+              </div>
+            </label>
+          </div>
+          <div class="sev-option high">
+            <input type="radio" name="severity" id="sev-high" value="high" onchange="checkSeverity()">
+            <label for="sev-high">
+              <span class="dot"></span>
+              <div>
+                <div>🟠 <strong>High</strong></div>
+                <small style="font-size:11px;color:var(--grey-3);font-weight:400">Needs fixing soon</small>
+              </div>
+            </label>
+          </div>
+          <div class="sev-option medium">
+            <input type="radio" name="severity" id="sev-medium" value="medium" onchange="checkSeverity()">
+            <label for="sev-medium">
+              <span class="dot"></span>
+              <div>
+                <div>🟡 <strong>Medium</strong></div>
+                <small style="font-size:11px;color:var(--grey-3);font-weight:400">Not urgent but important</small>
+              </div>
+            </label>
+          </div>
+          <div class="sev-option low">
+            <input type="radio" name="severity" id="sev-low" value="low" onchange="checkSeverity()">
+            <label for="sev-low">
+              <span class="dot"></span>
+              <div>
+                <div>🟢 <strong>Low</strong></div>
+                <small style="font-size:11px;color:var(--grey-3);font-weight:400">Minor / cosmetic</small>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo -->
+    <div class="form-card">
+      <div class="form-card-header">
+        <span class="icon">📸</span>
+        <h3>Add a Photo (optional)</h3>
+      </div>
+      <div class="field-row full-width">
+        <label for="photoUpload" class="photo-upload">
+          <input type="file" id="photoUpload" accept="image/*" onchange="previewPhoto(event)">
+          <span class="icon">📷</span>
+          <p>Tap to take or upload a photo</p>
+          <small>Helps us understand the issue quickly</small>
+        </label>
+        <div class="photo-preview" id="photoPreview">
+          <img id="photoImg" src="" alt="Preview">
+          <button type="button" onclick="removePhoto()">Remove Photo</button>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="submit-btn">📤 Submit Issue Report</button>
+  </form>
+
+  <div class="success-msg" id="successMsg">
+    <span class="icon">✅</span>
+    <h3>Report Submitted!</h3>
+    <p>Thank you! Your issue has been logged and our maintenance team will review it. You can close this page now.</p>
+  </div>
+
+</div>
+
+<div class="footer">
+  6th Bramshill (Hawley) Scout Group<br>
+  Need help? Contact your Group Scout Leader
+</div>
+
+<!-- ══ JAVASCRIPT ════════════════════════════════════════ -->
+<script>
+// Set today's date
+document.addEventListener('DOMContentLoaded', () => {
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('issueDate').value = today;
+});
+
+// Photo preview
+let photoData = null;
+
+function previewPhoto(event) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      photoData = e.target.result;
+      document.getElementById('photoImg').src = photoData;
+      document.getElementById('photoPreview').classList.add('visible');
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function removePhoto() {
+  photoData = null;
+  document.getElementById('photoUpload').value = '';
+  document.getElementById('photoPreview').classList.remove('visible');
+}
+
+// Check severity
+function checkSeverity() {
+  const critical = document.getElementById('sev-critical').checked;
+  const warning = document.getElementById('criticalWarning');
+  warning.style.display = critical ? 'block' : 'none';
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GOOGLE APPS SCRIPT CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+// 🔧 PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
+const SCRIPT_URL = "YOUR_SCRIPT_URL_HERE";
+
+// Example: const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz.../exec";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FORM SUBMISSION
+// ═══════════════════════════════════════════════════════════════════════════
+
+document.getElementById('issueForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  // Check if script URL is configured
+  if (SCRIPT_URL === "YOUR_SCRIPT_URL_HERE") {
+    alert("⚠️ Configuration Required\n\nThe Google Apps Script URL has not been set up yet.\n\nPlease see the setup instructions in the google_apps_script_backend.gs file.");
+    return;
+  }
+
+  // Disable submit button and show loading state
+  const submitBtn = document.querySelector('.submit-btn');
+  const originalText = submitBtn.textContent;
+  submitBtn.textContent = '📤 Submitting...';
+  submitBtn.disabled = true;
+
+  // Gather data
+  const data = {
+    reporter: {
+      name: document.getElementById('reporterName').value,
+      email: document.getElementById('reporterEmail').value || 'Not provided',
+      phone: document.getElementById('reporterPhone').value || 'Not provided',
+      role: document.getElementById('reporterRole').value,
+    },
+    issue: {
+      date: document.getElementById('issueDate').value,
+      area: document.getElementById('issueArea').value,
+      description: document.getElementById('issueDescription').value,
+      severity: document.querySelector('input[name="severity"]:checked').value,
+    },
+    photo: photoData,
+    timestamp: new Date().toISOString(),
+  };
+
+  try {
+    // Send to Google Apps Script
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors', // Required for Google Apps Script
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
+
+    // Note: no-cors mode means we can't read the response, but submission still works
+    // We assume success if no error was thrown
+    
+    // Also save to localStorage as backup
+    const reports = JSON.parse(localStorage.getItem('hutReports') || '[]');
+    reports.push(data);
+    localStorage.setItem('hutReports', JSON.stringify(reports));
+
+    // Show success
+    document.getElementById('issueForm').style.display = 'none';
+    document.getElementById('successMsg').classList.add('visible');
+
+  } catch (error) {
+    console.error('Submission error:', error);
+    
+    // Save to localStorage even if submission failed
+    const reports = JSON.parse(localStorage.getItem('hutReports') || '[]');
+    reports.push(data);
+    localStorage.setItem('hutReports', JSON.stringify(reports));
+    
+    // Show error message
+    alert('⚠️ Submission Error\n\nThere was a problem submitting your report. Your report has been saved locally in your browser.\n\nPlease contact the Group Scout Leader directly about this issue.\n\nError: ' + error.message);
+    
+    // Re-enable button
+    submitBtn.textContent = originalText;
+    submitBtn.disabled = false;
+  }
+});
+</script>
+</body>
+</html>

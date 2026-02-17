@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hut Maintenance – 6th Bramshill (Hawley)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --purple:   #5E2580;
+    --purple-d: #3D1554;
+    --purple-l: #F3EBF9;
+    --teal:     #00A99D;
+    --teal-l:   #E0F7F5;
+    --amber:    #FF8F00;
+    --amber-l:  #FFF8E1;
+    --red:      #C62828;
+    --red-l:    #FFEBEE;
+    --green:    #2E7D32;
+    --green-l:  #E8F5E9;
+    --grey-1:   #212121;
+    --grey-2:   #424242;
+    --grey-3:   #757575;
+    --grey-4:   #BDBDBD;
+    --grey-5:   #F5F5F5;
+    --white:    #FFFFFF;
+    --radius:   10px;
+    --shadow:   0 2px 12px rgba(94,37,128,.10);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #F0EBF5;
+    color: var(--grey-1);
+    min-height: 100vh;
+  }
+
+  /* ── Header ─────────────────────────────────────────── */
+  .site-header {
+    background: var(--purple-d);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,.25);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+  }
+  .scout-badge {
+    width: 46px;
+    height: 46px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 3px rgba(255,255,255,.2);
+  }
+  .header-text h1 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .header-text p {
+    font-size: 11px;
+    color: rgba(255,255,255,.65);
+    font-weight: 400;
+    margin-top: 2px;
+  }
+  .header-tab-bar {
+    display: flex;
+    background: var(--purple);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .header-tab-bar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,.65);
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    font-family: inherit;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .tab-btn.active {
+    color: #fff;
+    border-bottom-color: var(--teal);
+  }
+
+  /* ── Content ─────────────────────────────────────────── */
+  .content { max-width: 680px; margin: 0 auto; padding: 16px; }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Cards ───────────────────────────────────────────── */
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid var(--grey-5);
+  }
+  .card-header .icon { font-size: 18px; }
+  .card-header h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--purple);
+    flex: 1;
+  }
+  .card-header .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--purple-l);
+    color: var(--purple);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Form fields ─────────────────────────────────────── */
+  .field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--grey-5);
+  }
+  .field-group.full { grid-template-columns: 1fr; }
+  .field-group:last-child { border-bottom: none; }
+
+  label.field-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--grey-3);
+    margin-bottom: 5px;
+  }
+  input[type="text"],
+  input[type="date"],
+  input[type="time"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--grey-4);
+    border-radius: 7px;
+    font-size: 13px;
+    font-family: inherit;
+    color: var(--grey-1);
+    background: var(--white);
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(0,169,157,.12);
+  }
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* ── Check items ─────────────────────────────────────── */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--grey-5);
+    transition: background .15s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item.status-ok   { background: #F0FBF0; }
+  .check-item.status-fail { background: var(--red-l); }
+  .check-item.status-na   { background: var(--grey-5); }
+
+  .check-label {
+    flex: 1;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--grey-1);
+    padding-top: 2px;
+    line-height: 1.4;
+  }
+  .check-label small {
+    display: block;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--grey-3);
+    margin-top: 2px;
+  }
+
+  .check-radios {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .radio-pill input { display: none; }
+  .radio-pill label {
+    display: block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1.5px solid var(--grey-4);
+    color: var(--grey-3);
+    background: var(--white);
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .radio-pill.ok    input:checked + label { background: var(--green);  border-color: var(--green);  color: #fff; }
+  .radio-pill.fail  input:checked + label { background: var(--red);    border-color: var(--red);    color: #fff; }
+  .radio-pill.na    input:checked + label { background: var(--grey-3); border-color: var(--grey-3); color: #fff; }
+  .radio-pill.warn  input:checked + label { background: var(--amber);  border-color: var(--amber);  color: #fff; }
+
+  .check-notes {
+    padding: 6px 16px 10px 16px;
+    display: none;
+  }
+  .check-notes.visible { display: block; }
+  .check-notes textarea {
+    font-size: 12px;
+    min-height: 50px;
+    background: var(--amber-l);
+    border-color: var(--amber);
+  }
+
+  /* ── Defect card ─────────────────────────────────────── */
+  .defect-entry {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--grey-5);
+  }
+  .defect-entry:last-child { border-bottom: none; }
+
+  .severity-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 5px;
+  }
+  .sev-pill input { display: none; }
+  .sev-pill label {
+    padding: 5px 11px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1.5px solid var(--grey-4);
+    color: var(--grey-3);
+    background: var(--white);
+    transition: all .15s;
+  }
+  .sev-pill.critical input:checked + label { background:#B71C1C; border-color:#B71C1C; color:#fff; }
+  .sev-pill.high     input:checked + label { background:#E65100; border-color:#E65100; color:#fff; }
+  .sev-pill.medium   input:checked + label { background:#F57F17; border-color:#F57F17; color:#fff; }
+  .sev-pill.low      input:checked + label { background:var(--green); border-color:var(--green); color:#fff; }
+
+  .add-defect-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 16px;
+    padding: 10px 16px;
+    background: var(--teal-l);
+    border: 1.5px dashed var(--teal);
+    border-radius: var(--radius);
+    color: var(--teal);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    width: calc(100% - 32px);
+    justify-content: center;
+    transition: background .15s;
+  }
+  .add-defect-btn:hover { background: #B2EBE8; }
+
+  /* ── Periodic table ──────────────────────────────────── */
+  .periodic-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--grey-5);
+  }
+  .periodic-item:last-child { border-bottom: none; }
+  .freq-badge {
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+  }
+  .freq-monthly  { background: #E3F2FD; color: #1565C0; }
+  .freq-quarterly{ background: var(--green-l); color: var(--green); }
+  .freq-annual   { background: var(--amber-l); color: var(--amber); }
+  .periodic-text { flex: 1; font-size: 12px; font-weight: 500; }
+  .periodic-text small { display: block; font-size: 11px; color: var(--grey-3); font-weight: 400; }
+
+  .check-toggle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--grey-4);
+    background: var(--white);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all .15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+  .check-toggle.done {
+    background: var(--green);
+    border-color: var(--green);
+    color: #fff;
+  }
+
+  /* ── Summary / Submit ────────────────────────────────── */
+  .summary-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0; right: 0;
+    background: var(--purple-d);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,.2);
+    z-index: 99;
+  }
+  .summary-pills {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    flex-wrap: wrap;
+  }
+  .sum-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-family: 'DM Mono', monospace;
+  }
+  .sum-ok   { background: var(--green-l); color: var(--green); }
+  .sum-fail { background: var(--red-l);   color: var(--red); }
+  .sum-pend { background: rgba(255,255,255,.15); color: rgba(255,255,255,.8); }
+
+  .submit-btn {
+    padding: 10px 20px;
+    background: var(--teal);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s;
+  }
+  .submit-btn:hover { background: #008F84; }
+
+  /* ── Print / success ─────────────────────────────────── */
+  .print-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 13px;
+    background: var(--purple);
+    border: none;
+    border-radius: var(--radius);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin: 10px 0 80px;
+    transition: background .2s;
+  }
+  .print-btn:hover { background: var(--purple-d); }
+
+  .info-box {
+    background: var(--teal-l);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 14px;
+    font-size: 12px;
+    color: var(--grey-2);
+    margin-bottom: 14px;
+  }
+  .info-box strong { color: var(--teal); }
+
+  @media print {
+    .site-header, .summary-bar, .print-btn, .tab-btn { display: none !important; }
+    .tab-panel { display: block !important; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    body { background: white; }
+    .check-radios { display: none; }
+  }
+
+  pb { padding-bottom: 80px; display: block; }
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ═══════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="scout-badge">⚜️</div>
+    <div class="header-text">
+      <h1>6th Bramshill (Hawley) Scout Group</h1>
+      <p>Hut Maintenance &amp; Safety Log</p>
+    </div>
+  </div>
+  <div class="header-tab-bar" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('weekly', this)">📋 Meeting Check</button>
+    <button class="tab-btn" onclick="switchTab('periodic', this)">📅 Periodic</button>
+    <button class="tab-btn" onclick="switchTab('defects', this)">🔧 Defects</button>
+    <button class="tab-btn" onclick="switchTab('about', this)">ℹ️ About</button>
+  </div>
+</header>
+
+<!-- ══ TAB 1: WEEKLY / MEETING CHECK ════════════════════ -->
+<div class="content">
+<div id="tab-weekly" class="tab-panel active">
+
+  <!-- Meeting Details -->
+  <div class="card" style="margin-top:12px">
+    <div class="card-header">
+      <span class="icon">📝</span>
+      <h2>Meeting Details</h2>
+    </div>
+    <div class="field-group">
+      <div>
+        <label class="field-label">Date</label>
+        <input type="date" id="meetDate">
+      </div>
+      <div>
+        <label class="field-label">Meeting Type</label>
+        <select id="meetType">
+          <option>Cubs Meeting</option>
+          <option>Beavers Meeting</option>
+          <option>Scouts Meeting</option>
+          <option>Leaders / Committee</option>
+          <option>Hire / External Event</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label class="field-label">Leader / Checker</label>
+        <input type="text" id="checker" placeholder="Your name">
+      </div>
+      <div>
+        <label class="field-label">Check Time</label>
+        <input type="time" id="checkTime">
+      </div>
+    </div>
+    <div class="field-group full">
+      <label class="field-label">Check Type</label>
+      <select id="checkType" onchange="updateCheckTypeNote()">
+        <option value="before">Before Meeting (Opening)</option>
+        <option value="after">After Meeting (Closing)</option>
+        <option value="both">Full Check (Before &amp; After)</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Check Sections -->
+  <div id="checkSections"></div>
+
+  <button class="print-btn" onclick="generateSummary()">✅ Complete &amp; Review</button>
+</div>
+
+<!-- ══ TAB 2: PERIODIC ══════════════════════════════════ -->
+<div id="tab-periodic" class="tab-panel">
+  <div style="margin-top:12px"></div>
+  <div class="info-box">
+    <strong>Tap the circle</strong> to mark a task as done. Completed tasks are saved in your browser for this session.
+  </div>
+  <div id="periodicSections"></div>
+  <pb></pb>
+</div>
+
+<!-- ══ TAB 3: DEFECTS ═══════════════════════════════════ -->
+<div id="tab-defects" class="tab-panel">
+  <div style="margin-top:12px"></div>
+  <div class="info-box">
+    <strong>Log any defects or repairs needed.</strong> 🔴 Critical issues must be reported to the Group Scout Leader immediately and the area made safe before meetings continue.
+  </div>
+  <div id="defectList"></div>
+  <button class="add-defect-btn" onclick="addDefect()">＋ Add New Defect</button>
+  <pb></pb>
+</div>
+
+<!-- ══ TAB 4: ABOUT ═════════════════════════════════════ -->
+<div id="tab-about" class="tab-panel">
+  <div style="margin-top:12px"></div>
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">📱</span>
+      <h2>Sharing via QR Code</h2>
+    </div>
+    <div style="padding:14px 16px; font-size:13px; line-height:1.7; color:var(--grey-2); border-bottom:1px solid var(--grey-5)">
+      <p style="margin-bottom:10px">This form is a self-contained HTML file. To share it via QR code so anyone with a phone can open it:</p>
+      <ol style="padding-left:18px; margin-bottom:0">
+        <li>Host the file on <strong>GitHub Pages</strong> (free) or any web server</li>
+        <li>Copy the URL</li>
+        <li>Go to <strong>qrcode-monkey.com</strong> and paste the link</li>
+        <li>Use Scout purple <strong>#5E2580</strong> as the QR colour</li>
+        <li>Download, laminate and display in the hut!</li>
+      </ol>
+    </div>
+    <div style="padding:14px 16px; font-size:13px; line-height:1.7; color:var(--grey-2); border-bottom:1px solid var(--grey-5)">
+      <p><strong>Easiest hosting option:</strong></p>
+      <p>Upload to <strong>Google Drive</strong> → right-click → Get Link → Anyone with link → open the file URL → generate QR from that.</p>
+      <p style="margin-top:8px">Or upload to <strong>OneDrive</strong> if your group uses Microsoft 365.</p>
+    </div>
+    <div style="padding:14px 16px; font-size:13px; color:var(--grey-2)">
+      <strong>6th Bramshill (Hawley) Scout Group</strong><br>
+      Form version 1.0 · Built for Cubs hut maintenance
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <span class="icon">⚠️</span>
+      <h2>Safety Contacts</h2>
+    </div>
+    <div style="padding:14px 16px; font-size:13px; color:var(--grey-2); line-height:1.8">
+      <div style="margin-bottom:6px">🔴 <strong>Critical defect / safety issue:</strong> Contact Group Scout Leader immediately</div>
+      <div style="margin-bottom:6px">🔥 <strong>Fire:</strong> 999</div>
+      <div style="margin-bottom:6px">🚑 <strong>Medical Emergency:</strong> 999</div>
+      <div>🔌 <strong>Electrical emergency:</strong> Isolate supply and call 999</div>
+    </div>
+  </div>
+  <pb></pb>
+</div>
+
+</div><!-- /content -->
+
+<!-- ══ SUMMARY BAR ═══════════════════════════════════════ -->
+<div class="summary-bar" id="summaryBar">
+  <div class="summary-pills" id="summaryPills">
+    <span class="sum-pill sum-pend" id="pillPend">– pending</span>
+    <span class="sum-pill sum-ok"   id="pillOk" style="display:none">0 OK</span>
+    <span class="sum-pill sum-fail" id="pillFail" style="display:none">0 Issues</span>
+  </div>
+  <button class="submit-btn" onclick="generateSummary()">Review →</button>
+</div>
+
+<!-- ══ JAVASCRIPT ════════════════════════════════════════ -->
+<script>
+// ── Data ─────────────────────────────────────────────────
+const sections = [
+  { icon:"🔒", title:"Security & Access", items:[
+    { label:"All doors & windows secure on arrival" },
+    { label:"Alarm tested / disarmed correctly" },
+    { label:"Emergency exits clear and unobstructed", note:"Check both front and rear exits" },
+    { label:"Key safe / lock box functional" },
+  ]},
+  { icon:"🔥", title:"Fire Safety", items:[
+    { label:"Fire extinguishers present and in-date", note:"Check gauge in green zone" },
+    { label:"Fire blanket present in kitchen" },
+    { label:"Smoke / heat detectors functional", note:"Press test button monthly" },
+    { label:"Fire evacuation notice clearly displayed" },
+    { label:"Assembly point signage visible" },
+  ]},
+  { icon:"💡", title:"Electrical & Lighting", items:[
+    { label:"All lights working" },
+    { label:"Sockets & extension leads undamaged" },
+    { label:"No trailing cables or trip hazards" },
+  ]},
+  { icon:"🚿", title:"Toilets & Welfare", items:[
+    { label:"Toilets clean and functional" },
+    { label:"Hand soap and paper towels stocked" },
+    { label:"Hot water working" },
+  ]},
+  { icon:"🏠", title:"Main Hall", items:[
+    { label:"Floor clean and dry — no slip hazards" },
+    { label:"Tables & chairs in good condition" },
+    { label:"Store cupboards tidy and locked" },
+    { label:"Heating / ventilation working" },
+  ]},
+  { icon:"🍳", title:"Kitchen", items:[
+    { label:"Surfaces clean and hygienic" },
+    { label:"Fridge temperature ≤ 5°C" },
+    { label:"Waste bins emptied" },
+    { label:"Gas / electric cooker safe and clean" },
+  ]},
+  { icon:"🌿", title:"External & Grounds", items:[
+    { label:"Entrance path clear of hazards (ice, leaves, debris)" },
+    { label:"Bin area tidy" },
+    { label:"External lighting working" },
+    { label:"Gate / boundary secure" },
+  ]},
+  { icon:"📦", title:"Equipment & Safety Kit", items:[
+    { label:"First aid kit fully stocked and in-date" },
+    { label:"Register / sign-in sheet ready" },
+    { label:"Activity equipment returned and stored correctly" },
+  ]},
+];
+
+const periodic = [
+  { freq:"monthly",   area:"Fire Safety",  task:"Test all smoke & heat detectors" },
+  { freq:"monthly",   area:"Fire Safety",  task:"Check fire extinguisher pressure gauges" },
+  { freq:"monthly",   area:"Security",     task:"Check all door & window locks and hinges" },
+  { freq:"monthly",   area:"Electrical",   task:"Check RCD / trip switches in consumer unit" },
+  { freq:"monthly",   area:"Grounds",      task:"Inspect gutters for blockages" },
+  { freq:"monthly",   area:"First Aid",    task:"Check first aid kit expiry dates & restock" },
+  { freq:"quarterly", area:"Fire Safety",  task:"Full evacuation drill with cubs / leaders" },
+  { freq:"quarterly", area:"Electrical",   task:"PAT test portable electrical equipment" },
+  { freq:"quarterly", area:"Structure",    task:"Inspect roof for damage / leaks" },
+  { freq:"quarterly", area:"Grounds",      task:"Check & repair boundary fencing & gate hardware" },
+  { freq:"quarterly", area:"Heating",      task:"Service boiler / heating system filters" },
+  { freq:"quarterly", area:"Kitchen",      task:"Deep clean kitchen (oven, fridge, surfaces)" },
+  { freq:"annual",    area:"Fire Safety",  task:"Fire extinguishers professionally serviced" },
+  { freq:"annual",    area:"Fire Safety",  task:"Review & update fire risk assessment" },
+  { freq:"annual",    area:"Gas",          task:"Gas Safe engineer annual boiler service" },
+  { freq:"annual",    area:"Structure",    task:"Full structural survey / building inspection" },
+  { freq:"annual",    area:"Insurance",    task:"Review hut insurance policy renewal" },
+  { freq:"annual",    area:"Compliance",   task:"Review risk assessments for all activities" },
+];
+
+// ── Render Check Sections ─────────────────────────────────
+let checkStates = {}; // {sectionIdx_itemIdx: 'ok'|'fail'|'na'|'warn'}
+
+function buildCheckSections() {
+  const container = document.getElementById('checkSections');
+  container.innerHTML = '';
+
+  sections.forEach((sec, si) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="card-header">
+        <span class="icon">${sec.icon}</span>
+        <h2>${sec.title}</h2>
+        <span class="badge" id="badge-${si}">0/${sec.items.length}</span>
+      </div>`;
+
+    sec.items.forEach((item, ii) => {
+      const key = `${si}_${ii}`;
+      const div = document.createElement('div');
+      div.className = 'check-item';
+      div.id = `item-${key}`;
+      div.innerHTML = `
+        <div class="check-label">${item.label}${item.note ? `<small>${item.note}</small>` : ''}</div>
+        <div class="check-radios">
+          <div class="radio-pill ok">
+            <input type="radio" name="chk-${key}" id="ok-${key}" value="ok" onchange="onCheck('${key}','ok','${si}')">
+            <label for="ok-${key}">✓ OK</label>
+          </div>
+          <div class="radio-pill fail">
+            <input type="radio" name="chk-${key}" id="fail-${key}" value="fail" onchange="onCheck('${key}','fail','${si}')">
+            <label for="fail-${key}">✗ Issue</label>
+          </div>
+          <div class="radio-pill na">
+            <input type="radio" name="chk-${key}" id="na-${key}" value="na" onchange="onCheck('${key}','na','${si}')">
+            <label for="na-${key}">N/A</label>
+          </div>
+        </div>`;
+      card.appendChild(div);
+
+      // Notes field (shown on fail)
+      const notesDiv = document.createElement('div');
+      notesDiv.className = 'check-notes';
+      notesDiv.id = `notes-${key}`;
+      notesDiv.innerHTML = `<textarea placeholder="Describe the issue and any action taken…" id="notetext-${key}"></textarea>`;
+      card.appendChild(notesDiv);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function onCheck(key, val, si) {
+  checkStates[key] = val;
+  const item = document.getElementById(`item-${key}`);
+  item.classList.remove('status-ok','status-fail','status-na');
+  if (val === 'ok')   item.classList.add('status-ok');
+  if (val === 'fail') item.classList.add('status-fail');
+  if (val === 'na')   item.classList.add('status-na');
+
+  const notesDiv = document.getElementById(`notes-${key}`);
+  if (val === 'fail') notesDiv.classList.add('visible');
+  else notesDiv.classList.remove('visible');
+
+  updateBadge(si);
+  updateSummaryBar();
+}
+
+function updateBadge(si) {
+  const sec = sections[si];
+  let done = 0;
+  sec.items.forEach((_, ii) => {
+    if (checkStates[`${si}_${ii}`]) done++;
+  });
+  const badge = document.getElementById(`badge-${si}`);
+  if (badge) badge.textContent = `${done}/${sec.items.length}`;
+}
+
+function updateSummaryBar() {
+  let total = 0, done = 0, fails = 0;
+  sections.forEach((sec, si) => {
+    sec.items.forEach((_, ii) => {
+      total++;
+      const v = checkStates[`${si}_${ii}`];
+      if (v) done++;
+      if (v === 'fail') fails++;
+    });
+  });
+  const pend = total - done;
+  const pillPend = document.getElementById('pillPend');
+  const pillOk   = document.getElementById('pillOk');
+  const pillFail = document.getElementById('pillFail');
+
+  if (pend > 0) { pillPend.style.display=''; pillPend.textContent=`${pend} pending`; }
+  else { pillPend.style.display='none'; }
+  if (done - fails > 0) { pillOk.style.display=''; pillOk.textContent=`${done-fails} OK`; }
+  else { pillOk.style.display='none'; }
+  if (fails > 0) { pillFail.style.display=''; pillFail.textContent=`${fails} Issue${fails>1?'s':''}`; }
+  else { pillFail.style.display='none'; }
+}
+
+// ── Periodic ──────────────────────────────────────────────
+let periodicDone = {};
+
+function buildPeriodic() {
+  const container = document.getElementById('periodicSections');
+  const groups = { monthly:[], quarterly:[], annual:[] };
+  periodic.forEach((t,i) => groups[t.freq].push({...t, idx:i}));
+
+  const titles = { monthly:'Monthly', quarterly:'Quarterly', annual:'Annual' };
+  const icons  = { monthly:'📅', quarterly:'🗓️', annual:'🏆' };
+
+  Object.entries(groups).forEach(([freq, tasks]) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="card-header"><span class="icon">${icons[freq]}</span><h2>${titles[freq]} Tasks</h2></div>`;
+    tasks.forEach(t => {
+      const div = document.createElement('div');
+      div.className = 'periodic-item';
+      div.innerHTML = `
+        <span class="freq-badge freq-${freq}">${titles[freq]}</span>
+        <div class="periodic-text">${t.task}<small>${t.area}</small></div>
+        <div class="check-toggle" id="ptog-${t.idx}" onclick="togglePeriodic(${t.idx})"></div>`;
+      card.appendChild(div);
+    });
+    container.appendChild(card);
+  });
+}
+
+function togglePeriodic(idx) {
+  periodicDone[idx] = !periodicDone[idx];
+  const tog = document.getElementById(`ptog-${idx}`);
+  if (periodicDone[idx]) { tog.classList.add('done'); tog.textContent='✓'; }
+  else { tog.classList.remove('done'); tog.textContent=''; }
+}
+
+// ── Defects ───────────────────────────────────────────────
+let defectCount = 0;
+
+function addDefect() {
+  defectCount++;
+  const id = defectCount;
+  const list = document.getElementById('defectList');
+  const div = document.createElement('div');
+  div.className = 'card';
+  div.id = `defect-${id}`;
+  div.innerHTML = `
+    <div class="card-header">
+      <span class="icon">🔧</span>
+      <h2>Defect #${id}</h2>
+      <button onclick="removeDefect(${id})" style="background:none;border:none;color:var(--grey-3);cursor:pointer;font-size:18px;line-height:1">×</button>
+    </div>
+    <div class="defect-entry">
+      <label class="field-label">Area / Location</label>
+      <input type="text" placeholder="e.g. Main Hall, Kitchen, External" id="darea-${id}">
+    </div>
+    <div class="defect-entry">
+      <label class="field-label">Description</label>
+      <textarea placeholder="Describe the defect clearly…" id="ddesc-${id}"></textarea>
+    </div>
+    <div class="defect-entry">
+      <label class="field-label">Severity</label>
+      <div class="severity-row">
+        <div class="sev-pill critical"><input type="radio" name="dsev-${id}" id="dcrit-${id}" value="critical"><label for="dcrit-${id}">🔴 Critical</label></div>
+        <div class="sev-pill high"><input type="radio" name="dsev-${id}" id="dhigh-${id}" value="high"><label for="dhigh-${id}">🟠 High</label></div>
+        <div class="sev-pill medium"><input type="radio" name="dsev-${id}" id="dmed-${id}" value="medium"><label for="dmed-${id}">🟡 Medium</label></div>
+        <div class="sev-pill low"><input type="radio" name="dsev-${id}" id="dlow-${id}" value="low"><label for="dlow-${id}">🟢 Low</label></div>
+      </div>
+    </div>
+    <div class="field-group">
+      <div>
+        <label class="field-label">Reported By</label>
+        <input type="text" placeholder="Name" id="drep-${id}">
+      </div>
+      <div>
+        <label class="field-label">Action Required By</label>
+        <input type="date" id="ddue-${id}">
+      </div>
+    </div>`;
+  list.appendChild(div);
+}
+
+function removeDefect(id) {
+  const el = document.getElementById(`defect-${id}`);
+  if (el) el.remove();
+}
+
+// ── Summary / Review ──────────────────────────────────────
+function generateSummary() {
+  let total = 0, ok = 0, fails = 0, nas = 0, pend = 0;
+  let issueList = [];
+
+  sections.forEach((sec, si) => {
+    sec.items.forEach((item, ii) => {
+      total++;
+      const v = checkStates[`${si}_${ii}`];
+      if (!v) pend++;
+      else if (v === 'ok') ok++;
+      else if (v === 'fail') {
+        fails++;
+        const note = document.getElementById(`notetext-${si}_${ii}`)?.value || '';
+        issueList.push({ section: sec.title, item: item.label, note });
+      }
+      else if (v === 'na') nas++;
+    });
+  });
+
+  let msg = `=== 6th Bramshill (Hawley) Hut Maintenance ===\n`;
+  msg += `Date: ${document.getElementById('meetDate').value || 'Not set'}\n`;
+  msg += `Checker: ${document.getElementById('checker').value || 'Not set'}\n`;
+  msg += `Meeting: ${document.getElementById('meetType').value}\n\n`;
+  msg += `SUMMARY: ${ok} OK | ${fails} Issues | ${nas} N/A | ${pend} Not checked\n`;
+
+  if (issueList.length > 0) {
+    msg += `\n⚠️  ISSUES FOUND:\n`;
+    issueList.forEach((iss, i) => {
+      msg += `${i+1}. [${iss.section}] ${iss.item}\n`;
+      if (iss.note) msg += `   → ${iss.note}\n`;
+    });
+  }
+
+  if (pend > 0) {
+    alert(msg + `\n\n${pend} item(s) not yet checked. Please complete all checks before submitting.`);
+  } else {
+    alert(msg + '\n\nForm complete! You can now print this page or share via the QR code system.');
+  }
+}
+
+// ── Tab switching ─────────────────────────────────────────
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  btn.classList.add('active');
+
+  const bar = document.getElementById('summaryBar');
+  bar.style.display = name === 'weekly' ? 'flex' : 'none';
+}
+
+// ── Init ──────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Set today's date
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('meetDate').value = today;
+  const now = new Date();
+  document.getElementById('checkTime').value =
+    `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  buildCheckSections();
+  buildPeriodic();
+  updateSummaryBar();
+});
+</script>
+</body>
+</html>
