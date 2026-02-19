@@ -263,56 +263,80 @@
   .sev-option.low input:checked + label .dot { border-color: var(--green); background: var(--green); }
 
   /* ── Photo upload ────────────────────────────────────── */
+  .field-row.photo-wrapper {
+    border-bottom: none;
+    padding: 0;
+  }
+  
+  .photo-upload-container {
+    padding: 18px;
+  }
+  
   .photo-upload {
     border: 2px dashed var(--grey-4);
     border-radius: 8px;
-    padding: 20px;
+    padding: 32px 20px;
     text-align: center;
     cursor: pointer;
     transition: all .2s;
     background: var(--grey-5);
+    position: relative;
+    display: block;
   }
   .photo-upload:hover {
     border-color: var(--teal);
     background: var(--teal-l);
   }
   .photo-upload input {
-    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .photo-upload-content {
+    pointer-events: none;
   }
   .photo-upload .icon {
-    font-size: 36px;
-    margin-bottom: 8px;
+    font-size: 48px;
+    margin-bottom: 12px;
     display: block;
+    line-height: 1;
   }
   .photo-upload p {
-    font-size: 13px;
-    color: var(--grey-3);
+    font-size: 14px;
+    color: var(--grey-2);
     font-weight: 500;
+    margin: 0;
   }
   .photo-upload small {
     display: block;
-    font-size: 11px;
-    color: var(--grey-4);
-    margin-top: 4px;
+    font-size: 12px;
+    color: var(--grey-3);
+    margin-top: 6px;
   }
 
   .photo-preview {
     display: none;
-    margin-top: 12px;
-    padding: 12px;
-    background: var(--grey-5);
+    margin-top: 16px;
+    padding: 16px;
+    background: white;
     border-radius: 8px;
+    border: 2px solid var(--grey-4);
   }
   .photo-preview.visible { display: block; }
   .photo-preview img {
     max-width: 100%;
-    border-radius: 6px;
+    border-radius: 8px;
     display: block;
-    margin-bottom: 8px;
+    margin: 0 auto 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.1);
   }
   .photo-preview button {
-    font-size: 12px;
-    padding: 6px 12px;
+    font-size: 13px;
+    padding: 8px 16px;
     background: var(--red);
     color: white;
     border: none;
@@ -320,6 +344,12 @@
     cursor: pointer;
     font-family: inherit;
     font-weight: 600;
+    transition: background .2s;
+    display: block;
+    margin: 0 auto;
+  }
+  .photo-preview button:hover {
+    background: #B71C1C;
   }
 
   /* ── Submit button ───────────────────────────────────── */
@@ -549,16 +579,20 @@
         <span class="icon">📸</span>
         <h3>Add a Photo (optional)</h3>
       </div>
-      <div class="field-row full-width">
-        <label for="photoUpload" class="photo-upload">
-          <input type="file" id="photoUpload" accept="image/*" onchange="previewPhoto(event)">
-          <span class="icon">📷</span>
-          <p>Tap to take or upload a photo</p>
-          <small>Helps us understand the issue quickly</small>
-        </label>
-        <div class="photo-preview" id="photoPreview">
-          <img id="photoImg" src="" alt="Preview">
-          <button type="button" onclick="removePhoto()">Remove Photo</button>
+      <div class="field-row photo-wrapper full-width">
+        <div class="photo-upload-container">
+          <label for="photoUpload" class="photo-upload">
+            <input type="file" id="photoUpload" accept="image/*" onchange="previewPhoto(event)">
+            <div class="photo-upload-content">
+              <span class="icon">📷</span>
+              <p>Tap to take or upload a photo</p>
+              <small>Helps us understand the issue quickly</small>
+            </div>
+          </label>
+          <div class="photo-preview" id="photoPreview">
+            <img id="photoImg" src="" alt="Preview">
+            <button type="button" onclick="removePhoto()">Remove Photo</button>
+          </div>
         </div>
       </div>
     </div>
@@ -621,7 +655,7 @@ function checkSeverity() {
 // ═══════════════════════════════════════════════════════════════════════════
 
 // 🔧 PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwR2U7_UbV_U6Hg8XHOPhE0TCPEN2A3WvTCGmSMCMEN8xGWNOQliEDKEftiQePYApa7/exec";
+const SCRIPT_URL = "YOUR_SCRIPT_URL_HERE";
 
 // Example: const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz.../exec";
 
