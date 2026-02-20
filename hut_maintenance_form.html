@@ -581,7 +581,19 @@
 
 <!-- ══ JAVASCRIPT ════════════════════════════════════════ -->
 <script>
-// ── Data ─────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════
+// GOOGLE APPS SCRIPT CONFIGURATION
+// ═══════════════════════════════════════════════════════════════════════════
+
+// 🔧 PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw535MjLrg8Qy93KG0vOHgUeVg2F8h0eIvyF55sonkxdX3m4Ll8mUn6BYUnm7jfQetMtw/exec";
+
+// Example: const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz.../exec";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════════════════
+
 const sections = [
   { icon:"🔒", title:"Security & Access", items:[
     { label:"All doors & windows secure on arrival" },
@@ -876,8 +888,117 @@ function generateSummary() {
   if (pend > 0) {
     alert(msg + `\n\n${pend} item(s) not yet checked. Please complete all checks before submitting.`);
   } else {
-    alert(msg + '\n\nForm complete! You can now print this page or share via the QR code system.');
+    // Show save to cloud option
+    const confirmMsg = msg + '\n\nForm complete!\n\n' +
+      '• Click OK to save to Google Sheets (recommended)\n' +
+      '• Click Cancel to keep local only (no cloud backup)';
+    
+    if (confirm(confirmMsg)) {
+      saveToCloud();
+    } else {
+      alert('Form completed locally. Data is saved in your browser only.');
+    }
   }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SAVE TO GOOGLE SHEETS
+// ═══════════════════════════════════════════════════════════════════════════
+
+async function saveToCloud() {
+  // Check if script URL is configured
+  if (SCRIPT_URL === "YOUR_SCRIPT_URL_HERE") {
+    alert("⚠️ Configuration Required\n\nThe Google Apps Script URL has not been set up yet.\n\nData has been saved locally in your browser.\n\nTo enable cloud sync, please configure the SCRIPT_URL in the script section.");
+    return;
+  }
+
+  // Collect meeting details
+  const meetingData = {
+    date: document.getElementById('meetDate').value,
+    type: document.getElementById('meetType').value,
+    checker: document.getElementById('checker').value,
+    checkTime: document.getElementById('checkTime').value,
+    checkType: document.getElementById('checkType').value,
+  };
+
+  // Collect all check results
+  const checkResults = [];
+  sections.forEach((sec, si) => {
+    sec.items.forEach((item, ii) => {
+      const key = `${si}_${ii}`;
+      const status = checkStates[key];
+      const notes = document.getElementById(`notetext-${key}`)?.value || '';
+      
+      checkResults.push({
+        section: sec.title,
+        item: item.label,
+        status: status || 'not_checked',
+        notes: notes
+      });
+    });
+  });
+
+  // Prepare data payload
+  const payload = {
+    type: 'admin_meeting_check',
+    timestamp: new Date().toISOString(),
+    meeting: meetingData,
+    checks: checkResults
+  };
+
+  try {
+    // Show loading state
+    const originalContent = document.body.innerHTML;
+    showLoadingScreen();
+
+    // Send to Google Apps Script
+    const response = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    // Success
+    setTimeout(() => {
+      hideLoadingScreen();
+      alert('✅ Saved to Google Sheets!\n\nYour meeting check has been recorded in the cloud.\n\nYou can now close this page or start a new check.');
+    }, 1500);
+
+  } catch (error) {
+    console.error('Save error:', error);
+    hideLoadingScreen();
+    alert('⚠️ Cloud Save Failed\n\nYour data is still saved locally in your browser.\n\nError: ' + error.message + '\n\nPlease check your internet connection and try again.');
+  }
+}
+
+function showLoadingScreen() {
+  const loader = document.createElement('div');
+  loader.id = 'cloudLoader';
+  loader.style.cssText = `
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(94, 37, 128, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    flex-direction: column;
+    gap: 20px;
+  `;
+  loader.innerHTML = `
+    <div style="font-size: 48px; animation: spin 1s linear infinite;">☁️</div>
+    <div style="color: white; font-size: 20px; font-weight: 600;">Saving to Google Sheets...</div>
+    <style>
+      @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+  `;
+  document.body.appendChild(loader);
+}
+
+function hideLoadingScreen() {
+  const loader = document.getElementById('cloudLoader');
+  if (loader) loader.remove();
 }
 
 // ── Tab switching ─────────────────────────────────────────
